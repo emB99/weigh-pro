@@ -115,14 +115,14 @@ export function ScaleMonitor({ onWeightCaptured }: ScaleMonitorProps) {
           <div className="flex items-baseline gap-1">
             <span
               className={cn(
-                "text-5xl font-mono font-bold tracking-tight transition-colors",
+                "text-3xl sm:text-5xl font-mono font-bold tracking-tight transition-colors",
                 status === "reading" && "text-warning animate-pulse",
                 status === "stable" && weight > 0 && "text-primary",
               )}
             >
               {formatWeight(weight)}
             </span>
-            <span className="text-xl text-muted-foreground font-medium">kg</span>
+            <span className="text-lg sm:text-xl text-muted-foreground font-medium">kg</span>
           </div>
           <div className="text-xs text-muted-foreground mt-2 font-mono">
             {time.toLocaleTimeString()} • {time.toLocaleDateString()}

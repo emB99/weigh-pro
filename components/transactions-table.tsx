@@ -202,118 +202,195 @@ export function TransactionsTable() {
             <FileText className="w-4 h-4 text-primary" />
             Recent Transactions
           </CardTitle>
-          <div className="flex items-center gap-2">
-            <div className="relative">
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="relative flex-1 sm:flex-initial min-w-[200px] sm:min-w-0">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 w-48 bg-secondary border-border"
+                className="pl-9 w-full sm:w-48 bg-secondary border-border"
               />
             </div>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" className="shrink-0">
               <Filter className="w-4 h-4" />
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="hidden sm:inline-flex">
               <Download className="w-4 h-4 mr-2" />
               Export
             </Button>
-            <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleNewTransaction}>
+            <Button variant="outline" size="icon" className="sm:hidden">
+              <Download className="w-4 h-4" />
+            </Button>
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground shrink-0" onClick={handleNewTransaction}>
               <Plus className="w-4 h-4 mr-2" />
-              New
+              <span className="hidden sm:inline">New</span>
+              <span className="sm:hidden">New</span>
             </Button>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="rounded-lg border border-border overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-secondary/50 hover:bg-secondary/50">
-                <TableHead className="font-medium">
-                  <Button variant="ghost" size="sm" className="h-auto p-0 font-medium hover:bg-transparent">
-                    Transaction
-                    <ArrowUpDown className="ml-1 h-3 w-3" />
-                  </Button>
-                </TableHead>
-                <TableHead className="font-medium">Vehicle</TableHead>
-                <TableHead className="font-medium">Date/Time</TableHead>
-                <TableHead className="font-medium">Type</TableHead>
-                <TableHead className="font-medium">Customer</TableHead>
-                <TableHead className="font-medium text-right">1st Mass</TableHead>
-                <TableHead className="font-medium text-right">2nd Mass</TableHead>
-                <TableHead className="font-medium text-right">Net Mass</TableHead>
-                <TableHead className="font-medium">Status</TableHead>
-                <TableHead className="font-medium w-10"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredTransactions.map((transaction) => (
-                <TableRow key={transaction.id} className="hover:bg-secondary/30 cursor-pointer">
-                  <TableCell className="font-mono text-sm">{transaction.transactionNo}</TableCell>
-                  <TableCell>
-                    <span className="font-medium">{transaction.vehicleReg}</span>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground text-sm">{transaction.firstMassDate}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className={cn("text-xs", getTypeColor(transaction.type))}>
-                      {transaction.type}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{transaction.customer}</TableCell>
-                  <TableCell className="text-right font-mono">{transaction.firstMass.toLocaleString()} kg</TableCell>
-                  <TableCell className="text-right font-mono text-muted-foreground">
-                    {transaction.secondMass ? `${transaction.secondMass.toLocaleString()} kg` : "—"}
-                  </TableCell>
-                  <TableCell className="text-right font-mono font-medium">
-                    {transaction.netMass ? `${transaction.netMass.toLocaleString()} kg` : "—"}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className={cn("text-xs", getStatusColor(transaction.status))}>
-                      {transaction.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleView(transaction)}>
-                          <Eye className="w-4 h-4 mr-2" />
-                          View Details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleEdit(transaction)}>
-                          <Pencil className="w-4 h-4 mr-2" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handlePrint(transaction)}>
-                          <Printer className="w-4 h-4 mr-2" />
-                          Print Ticket
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(transaction)}>
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+        {/* Desktop Table View */}
+        <div className="hidden md:block rounded-lg border border-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-secondary/50 hover:bg-secondary/50">
+                  <TableHead className="font-medium">
+                    <Button variant="ghost" size="sm" className="h-auto p-0 font-medium hover:bg-transparent">
+                      Transaction
+                      <ArrowUpDown className="ml-1 h-3 w-3" />
+                    </Button>
+                  </TableHead>
+                  <TableHead className="font-medium">Vehicle</TableHead>
+                  <TableHead className="font-medium">Date/Time</TableHead>
+                  <TableHead className="font-medium">Type</TableHead>
+                  <TableHead className="font-medium">Customer</TableHead>
+                  <TableHead className="font-medium text-right">1st Mass</TableHead>
+                  <TableHead className="font-medium text-right">2nd Mass</TableHead>
+                  <TableHead className="font-medium text-right">Net Mass</TableHead>
+                  <TableHead className="font-medium">Status</TableHead>
+                  <TableHead className="font-medium w-10"></TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredTransactions.map((transaction) => (
+                  <TableRow key={transaction.id} className="hover:bg-secondary/30 cursor-pointer">
+                    <TableCell className="font-mono text-sm">{transaction.transactionNo}</TableCell>
+                    <TableCell>
+                      <span className="font-medium">{transaction.vehicleReg}</span>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm">{transaction.firstMassDate}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className={cn("text-xs", getTypeColor(transaction.type))}>
+                        {transaction.type}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{transaction.customer}</TableCell>
+                    <TableCell className="text-right font-mono">{transaction.firstMass.toLocaleString()} kg</TableCell>
+                    <TableCell className="text-right font-mono text-muted-foreground">
+                      {transaction.secondMass ? `${transaction.secondMass.toLocaleString()} kg` : "—"}
+                    </TableCell>
+                    <TableCell className="text-right font-mono font-medium">
+                      {transaction.netMass ? `${transaction.netMass.toLocaleString()} kg` : "—"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className={cn("text-xs", getStatusColor(transaction.status))}>
+                        {transaction.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleView(transaction)}>
+                            <Eye className="w-4 h-4 mr-2" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleEdit(transaction)}>
+                            <Pencil className="w-4 h-4 mr-2" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handlePrint(transaction)}>
+                            <Printer className="w-4 h-4 mr-2" />
+                            Print Ticket
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(transaction)}>
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
 
-        <div className="flex items-center justify-between mt-4 text-sm text-muted-foreground">
-          <span>
+        {/* Mobile Card View */}
+        <div className="md:hidden space-y-3">
+          {filteredTransactions.map((transaction) => (
+            <Card key={transaction.id} className="bg-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <div className="font-mono text-sm font-semibold mb-1">{transaction.transactionNo}</div>
+                    <div className="text-sm font-medium">{transaction.vehicleReg}</div>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => handleView(transaction)}>
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Details
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEdit(transaction)}>
+                        <Pencil className="w-4 h-4 mr-2" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handlePrint(transaction)}>
+                        <Printer className="w-4 h-4 mr-2" />
+                        Print Ticket
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(transaction)}>
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Badge variant="outline" className={cn("text-xs", getTypeColor(transaction.type))}>
+                    {transaction.type}
+                  </Badge>
+                  <Badge variant="outline" className={cn("text-xs", getStatusColor(transaction.status))}>
+                    {transaction.status}
+                  </Badge>
+                </div>
+                <div className="text-sm text-muted-foreground mb-3">{transaction.customer}</div>
+                <div className="text-xs text-muted-foreground mb-2">{transaction.firstMassDate}</div>
+                <div className="grid grid-cols-3 gap-2 pt-3 border-t border-border">
+                  <div>
+                    <div className="text-xs text-muted-foreground">1st Mass</div>
+                    <div className="text-sm font-mono font-semibold">{transaction.firstMass.toLocaleString()} kg</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">2nd Mass</div>
+                    <div className="text-sm font-mono">
+                      {transaction.secondMass ? `${transaction.secondMass.toLocaleString()} kg` : "—"}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">Net Mass</div>
+                    <div className="text-sm font-mono font-semibold text-primary">
+                      {transaction.netMass ? `${transaction.netMass.toLocaleString()} kg` : "—"}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 text-sm text-muted-foreground">
+          <span className="text-center sm:text-left">
             Showing {filteredTransactions.length} of {transactionsList.length} transactions
           </span>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" disabled>
-              Previous
+              <span className="hidden sm:inline">Previous</span>
+              <span className="sm:hidden">Prev</span>
             </Button>
             <Button variant="outline" size="sm" className="bg-primary/10 text-primary border-primary/20">
               1
@@ -332,14 +409,14 @@ export function TransactionsTable() {
       </CardContent>
 
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Transaction Details</DialogTitle>
             <DialogDescription>View complete transaction information</DialogDescription>
           </DialogHeader>
           {selectedTransaction && (
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground">Transaction Number</p>
                   <p className="font-mono font-medium">{selectedTransaction.transactionNo}</p>
@@ -377,7 +454,7 @@ export function TransactionsTable() {
                   <p className="font-medium">{selectedTransaction.firstMassDate}</p>
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-4 p-4 bg-secondary/50 rounded-lg border border-border">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-secondary/50 rounded-lg border border-border">
                 <div>
                   <p className="text-sm text-muted-foreground">First Mass</p>
                   <p className="text-2xl font-mono font-bold mt-1">{selectedTransaction.firstMass.toLocaleString()} kg</p>

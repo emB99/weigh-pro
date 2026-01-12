@@ -126,7 +126,7 @@ export default function WeighingPage() {
                 </RadioGroup>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="vehicleReg">Vehicle Registration *</Label>
                   <Input
@@ -185,37 +185,38 @@ export default function WeighingPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-4 p-4 bg-secondary/50 rounded-lg border border-border">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-secondary/50 rounded-lg border border-border">
                 <div>
                   <Label className="text-muted-foreground text-sm">First Mass</Label>
-                  <div className="text-2xl font-mono font-bold mt-1">
+                  <div className="text-xl sm:text-2xl font-mono font-bold mt-1">
                     {firstMass ? `${firstMass.toLocaleString()} kg` : "—"}
                   </div>
                 </div>
                 <div>
                   <Label className="text-muted-foreground text-sm">Second Mass</Label>
-                  <div className="text-2xl font-mono font-bold mt-1">
+                  <div className="text-xl sm:text-2xl font-mono font-bold mt-1">
                     {secondMass ? `${secondMass.toLocaleString()} kg` : "—"}
                   </div>
                 </div>
                 <div>
                   <Label className="text-muted-foreground text-sm">Net Mass</Label>
-                  <div className="text-2xl font-mono font-bold text-primary mt-1">
+                  <div className="text-xl sm:text-2xl font-mono font-bold text-primary mt-1">
                     {netMass ? `${netMass.toLocaleString()} kg` : "—"}
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <Button onClick={handleSave} className="flex-1 bg-primary hover:bg-primary/90">
                   <Save className="w-4 h-4 mr-2" />
-                  Save Transaction
+                  <span className="hidden sm:inline">Save Transaction</span>
+                  <span className="sm:hidden">Save</span>
                 </Button>
-                <Button variant="outline" onClick={handleClear}>
+                <Button variant="outline" onClick={handleClear} className="flex-1 sm:flex-initial">
                   <X className="w-4 h-4 mr-2" />
                   Clear
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" className="flex-1 sm:flex-initial">
                   <Printer className="w-4 h-4 mr-2" />
                   Print
                 </Button>

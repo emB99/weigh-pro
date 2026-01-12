@@ -6,7 +6,7 @@ import { StatsCards } from "@/components/stats-cards"
 export default function Dashboard() {
   return (
     <AppLayout>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2">
           <StatsCards />
         </div>

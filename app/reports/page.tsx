@@ -50,9 +50,9 @@ export default function ReportsPage() {
             </h1>
             <p className="text-muted-foreground mt-1">View detailed reports and analytics</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <Select value={reportType} onValueChange={setReportType}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-full sm:w-40">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -64,7 +64,7 @@ export default function ReportsPage() {
             </Select>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
+                <Button variant="outline" className="w-full sm:w-[240px] justify-start text-left font-normal">
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {dateRange.from ? (
                     dateRange.to ? (

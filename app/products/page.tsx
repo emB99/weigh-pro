@@ -112,26 +112,29 @@ export default function ProductsPage() {
               <Package className="w-5 h-5 text-primary" />
               Product Management
             </CardTitle>
-            <div className="flex items-center gap-2">
-              <div className="relative">
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="relative flex-1 sm:flex-initial min-w-[200px] sm:min-w-0">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 w-64 bg-secondary border-border"
+                  className="pl-9 w-full sm:w-64 bg-secondary border-border"
                 />
               </div>
-              <Button onClick={handleAddNew} className="bg-primary hover:bg-primary/90">
+              <Button onClick={handleAddNew} className="bg-primary hover:bg-primary/90 shrink-0">
                 <Plus className="w-4 h-4 mr-2" />
-                Add Product
+                <span className="hidden sm:inline">Add Product</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-lg border border-border overflow-hidden">
-            <Table>
+          {/* Desktop Table View */}
+          <div className="hidden md:block rounded-lg border border-border overflow-hidden">
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow className="bg-secondary/50 hover:bg-secondary/50">
                   <TableHead className="font-medium">Product Name</TableHead>
@@ -182,6 +185,60 @@ export default function ProductsPage() {
                 ))}
               </TableBody>
             </Table>
+            </div>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
+            {filteredProducts.map((product) => (
+              <Card key={product.id} className="bg-card border-border">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <div className="font-medium mb-1">{product.name}</div>
+                      <div className="font-mono text-sm text-muted-foreground mb-2">{product.code}</div>
+                      <Badge variant="outline" className="text-xs mb-2">
+                        {product.category}
+                      </Badge>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreHorizontal className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleEdit(product)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => handleDelete(product.id)}
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  <div className="flex items-center justify-between pt-3 border-t border-border">
+                    <div>
+                      <div className="text-xs text-muted-foreground">Unit</div>
+                      <div className="text-sm font-medium">{product.unit}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground">Transactions</div>
+                      <div className="text-sm font-medium">{product.totalTransactions}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground">Last Used</div>
+                      <div className="text-xs text-muted-foreground">{product.lastUsed}</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
           <div className="flex items-center justify-between mt-4 text-sm text-muted-foreground">
@@ -203,7 +260,7 @@ export default function ProductsPage() {
               <Label htmlFor="name">Product Name</Label>
               <Input id="name" defaultValue={editingProduct?.name} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="code">Product Code</Label>
                 <Input id="code" defaultValue={editingProduct?.code} />

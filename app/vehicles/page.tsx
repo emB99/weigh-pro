@@ -109,26 +109,29 @@ export default function VehiclesPage() {
               <Truck className="w-5 h-5 text-primary" />
               Vehicle Management
             </CardTitle>
-            <div className="flex items-center gap-2">
-              <div className="relative">
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="relative flex-1 sm:flex-initial min-w-[200px] sm:min-w-0">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   placeholder="Search vehicles..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 w-64 bg-secondary border-border"
+                  className="pl-9 w-full sm:w-64 bg-secondary border-border"
                 />
               </div>
-              <Button onClick={handleAddNew} className="bg-primary hover:bg-primary/90">
+              <Button onClick={handleAddNew} className="bg-primary hover:bg-primary/90 shrink-0">
                 <Plus className="w-4 h-4 mr-2" />
-                Add Vehicle
+                <span className="hidden sm:inline">Add Vehicle</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-lg border border-border overflow-hidden">
-            <Table>
+          {/* Desktop Table View */}
+          <div className="hidden md:block rounded-lg border border-border overflow-hidden">
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow className="bg-secondary/50 hover:bg-secondary/50">
                   <TableHead className="font-medium">Registration</TableHead>
@@ -180,6 +183,59 @@ export default function VehiclesPage() {
                 ))}
               </TableBody>
             </Table>
+            </div>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
+            {filteredVehicles.map((vehicle) => (
+              <Card key={vehicle.id} className="bg-card border-border">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <div className="font-mono font-medium mb-1">{vehicle.registration}</div>
+                      <div className="font-medium mb-1">{vehicle.make}</div>
+                      <div className="text-sm text-muted-foreground mb-2">{vehicle.model}</div>
+                      <div className="text-sm text-muted-foreground mb-2">Owner: {vehicle.owner}</div>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreHorizontal className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => handleEdit(vehicle)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => handleDelete(vehicle.id)}
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  <div className="flex items-center justify-between pt-3 border-t border-border">
+                    <div>
+                      <div className="text-xs text-muted-foreground">Year</div>
+                      <div className="text-sm font-medium">{vehicle.year}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground">Weighings</div>
+                      <div className="text-sm font-medium">{vehicle.totalWeighings}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground">Last Weighing</div>
+                      <div className="text-xs text-muted-foreground">{vehicle.lastWeighing}</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
           <div className="flex items-center justify-between mt-4 text-sm text-muted-foreground">
@@ -201,7 +257,7 @@ export default function VehiclesPage() {
               <Label htmlFor="registration">Registration Number</Label>
               <Input id="registration" defaultValue={editingVehicle?.registration} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="make">Make</Label>
                 <Input id="make" defaultValue={editingVehicle?.make} />
